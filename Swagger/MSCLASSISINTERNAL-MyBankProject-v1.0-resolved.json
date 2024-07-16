@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Документация к банковскому сервису",
+    "description": "В ходе знакомства с инструментом Swagger, будет создаваться интерактивная API- документация для составления документации к банковскому сервису.",
+    "contact": {
+      "email": "ms.classisinternal@mail.ru"
+    },
+    "version": "v1.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/MSCLASSISINTERNAL/MyBankProject/v1.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://MyBankProject.ru/api/v1.0/",
+      "description": "Продакшн Документация к банковскому сервису"
+    },
+    {
+      "url": "https://MyBankProject.preprod.ru/api/v1.0/",
+      "description": "Пре-продакшн Документация к банковскому сервису"
+    },
+    {
+      "url": "https://MyBankProject.test.ru/api/v1.0/",
+      "description": "Тестовая площадка Документация к банковскому сервису"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Заявки",
+      "description": "Заявки содержат форму для выполнения банковской услуги, с возможностью получения уведомления о ее статусе."
+    }
+  ],
+  "paths": {
+    "/applications": {
+      "post": {
+        "tags": [
+          "Заявки"
+        ],
+        "summary": "Метод создания заявки в банковском сервисе",
+        "description": "Метод создания заявки в банковском сервисе. Добавляет новую заявку в очередь.",
+        "operationId": "postApplications",
+        "requestBody": {
+          "description": "Пример JSON-объекта с заявкой, которая будет добавлена в очередь на выполнение.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationsRequestJsonObject"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Заявка создана.",
+            "content": {
+              "appication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationsResponseJsonObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неправильный запрос.",
+            "content": {
+              "appication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorJsonObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/applications/{id}/status": {
+      "get": {
+        "tags": [
+          "Заявки"
+        ],
+        "summary": "Метод возвращения статуса заявки",
+        "description": "Метод возвращает статус заявки. Метод в разработке. Нужны элементы пагинации и фильтры.",
+        "operationId": "getApplications",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Заявка создана",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Статус заявки",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Заявка была получена и передана в теле сообщения.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApplicationsResponseJsonObject"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not founded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetApplicationsResponseJsonObject"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApplicationsRequestJsonObject": {
+        "required": [
+          "INN",
+          "address",
+          "date",
+          "description",
+          "name",
+          "number",
+          "passport"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Евдокимова Наталия Андреевна"
+          },
+          "description": {
+            "type": "string",
+            "example": "Заявка на одобрение кредита."
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "passport": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "integer"
+          },
+          "INN": {
+            "type": "integer"
+          },
+          "address": {
+            "type": "string",
+            "example": "г. Москва ул. Хорошая, д.24"
+          }
+        }
+      },
+      "ApplicationsResponseJsonObject": {
+        "required": [
+          "INN",
+          "address",
+          "date",
+          "description",
+          "name",
+          "number",
+          "passport"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 777
+          },
+          "name": {
+            "type": "string",
+            "example": "Евдокимова Наталия Андреевна"
+          },
+          "description": {
+            "type": "string",
+            "example": "Заявка на одобрение кредита."
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "passport": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "integer"
+          },
+          "INN": {
+            "type": "integer"
+          },
+          "address": {
+            "type": "string",
+            "example": "г. Москва ул. Хорошая, д.24"
+          }
+        }
+      },
+      "ErrorJsonObject": {
+        "required": [
+          "code",
+          "field",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 400
+          },
+          "field": {
+            "type": "string",
+            "description": "Поле, в котором допущена ошибка.",
+            "example": "name"
+          },
+          "message": {
+            "type": "string",
+            "example": "Отсутствует Фамилия, Отчество"
+          }
+        }
+      },
+      "GetApplicationsResponseJsonObject": {
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Заявка не найдена."
+          }
+        }
+      }
+    }
+  }
+}
